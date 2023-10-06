@@ -1,7 +1,14 @@
 import React, { useState } from "react";
-import { Button, FormControl, Input, InputLabel } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  Input,
+  InputLabel,
+  Alert,
+  AlertTitle,
+  Snackbar,
+} from "@mui/material";
 import { FaWpforms } from "react-icons/fa";
-import ErrorModal from "./components/Modal/ErrorModal";
 
 const containerStyle = {
   display: "flex",
@@ -37,28 +44,34 @@ const iconStyle = {
   marginRight: "10px",
 };
 
+const snackbarStyle = {
+  animation: "slide-in 0.5s",
+};
+
 const AddUser = () => {
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
-  const [openErrorModal, setOpenErrorModal] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleFormSubmit = (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
+    e.preventDefault();
 
     if (name.trim() === "" || age.trim() === "") {
-      // Display an error message in the modal if either field is empty
-      setErrorMessage("Both fields are required.");
-      setOpenErrorModal(true);
+      setErrorMessage("Both fields are required!");
+      setOpenAlert(true);
     } else {
-      // Handle successful form submission
       console.log("Name:", name);
       console.log("Age:", age);
     }
   };
 
-  const handleCloseErrorModal = () => {
-    setOpenErrorModal(false);
+  const handleAlertClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenAlert(false);
   };
 
   return (
@@ -80,6 +93,7 @@ const AddUser = () => {
         <FormControl style={formControlStyle}>
           <InputLabel style={labelStyle}>Age (years)</InputLabel>
           <Input
+            type="number"
             value={age}
             onChange={(e) => setAge(e.target.value)}
             onFocus={(e) => e.target.classList.add("input-focused")}
@@ -88,22 +102,24 @@ const AddUser = () => {
         </FormControl>
 
         <div>
-          <Button
-            variant="contained"
-            type="submit" // Set the button type to "submit"
-            style={buttonStyle}
-          >
+          <Button variant="contained" type="submit" style={buttonStyle}>
             Add User
           </Button>
         </div>
       </form>
 
-      {/* Render the ErrorModal component */}
-      <ErrorModal
-        open={openErrorModal}
-        onClose={handleCloseErrorModal}
-        errorMessage={errorMessage}
-      />
+      <Snackbar
+        open={openAlert}
+        autoHideDuration={2000}
+        onClose={handleAlertClose}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        style={snackbarStyle}
+      >
+        <Alert severity="error" onClose={handleAlertClose}>
+          <AlertTitle>Error</AlertTitle>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
