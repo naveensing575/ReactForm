@@ -36,3 +36,17 @@
     transform: rotate(360deg);
   }
 }
+
+/* Remove input arrows (spinners) for number inputs */
+input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+  appearance: none; /* Other modern browsers */
+}
+
+/* Remove inner spin button (webkit browsers) */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0; /* Remove the margin that causes spacing */
+}
