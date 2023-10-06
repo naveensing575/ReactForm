@@ -43,11 +43,15 @@ const AddUser = () => {
   const [openErrorModal, setOpenErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleFormSubmit = () => {
+  const handleFormSubmit = (e) => {
+    e.preventDefault(); // Prevent the default form submission behavior
+
     if (name.trim() === "" || age.trim() === "") {
+      // Display an error message in the modal if either field is empty
       setErrorMessage("Both fields are required.");
       setOpenErrorModal(true);
     } else {
+      // Handle successful form submission
       console.log("Name:", name);
       console.log("Age:", age);
     }
@@ -59,7 +63,7 @@ const AddUser = () => {
 
   return (
     <div style={containerStyle}>
-      <form style={formStyle}>
+      <form style={formStyle} onSubmit={handleFormSubmit}>
         <h1>
           <FaWpforms style={iconStyle} />
           React Forms
@@ -76,7 +80,6 @@ const AddUser = () => {
         <FormControl style={formControlStyle}>
           <InputLabel style={labelStyle}>Age (years)</InputLabel>
           <Input
-            type="number"
             value={age}
             onChange={(e) => setAge(e.target.value)}
             onFocus={(e) => e.target.classList.add("input-focused")}
@@ -87,8 +90,7 @@ const AddUser = () => {
         <div>
           <Button
             variant="contained"
-            type="button"
-            onClick={handleFormSubmit}
+            type="submit" // Set the button type to "submit"
             style={buttonStyle}
           >
             Add User
